@@ -1,1 +1,38 @@
 # lab3-goodreads
+
+1. Data Cleaning(in Databricks)
+- Dropped missing or invalid rows for `review_id`, `book_id`, and `user_id`
+- Converted `rating` to integers between 1–5
+- Trimmed text and removed short reviews (<10 characters)
+- Deduplicated using `review_id`
+- Joined with `books` and `authors` data
+- Saved cleaned output to Delta table: **`curated_reviews`**
+
+2. Data Curation
+- Registered `curated_reviews` in Hive Metastore  
+  `hive_metastore.default.curated_reviews`
+- Verified schema and record count using SQL queries
+
+3. Microsoft Fabric
+- Created workspace `goodreads-ws-60314597`
+- Connected to Azure Data Lake Gen2:
+  `https://noorawitha.dfs.core.windows.net`
+- Loaded curated Delta table from:
+  `lakehouse/gold/curated_reviews/`
+- Adjusted column data types (`review_id`, `book_id`, `user_id`, etc.)
+- Handled missing values:
+  - Removed blanks in `rating`
+  - Replaced null `n_votes` with 0
+  - Filled missing `language` with `"Unknown"`
+- Trimmed text and standardized formatting (capitalized titles)
+- Created derived aggregations:
+  - Average rating per BookID
+  - Number of reviews per BookID
+  - Average rating per Author
+  - Word count stats on `review_text`
+- Published the final curated table back to Fabric
+
+Author
+Noora AlBordeni
+Student ID: 60314597
+University of Doha for Science and Technology
