@@ -32,7 +32,135 @@
   - Word count stats on `review_text`
 - Published the final curated table back to Fabric
 
+
+
+# Lab 4 – Text Feature Engineering on Azure (Databricks)
+
+## Project Overview
+
+This lab focuses on transforming unstructured Goodreads review text into structured numerical features suitable for machine learning models. The workflow extends the Gold-layer dataset by applying text cleaning, feature extraction, and vectorization techniques to prepare a comprehensive feature set for downstream modeling tasks.
+
+The objective is to convert raw review text into statistically, semantically, and emotionally meaningful representations while preserving essential metadata for analysis.
+
+## Dataset
+
+* Source: Goodreads curated dataset (Gold Layer)
+* Input Path:
+  `abfss://lakehouse@noorawitha.dfs.core.windows.net/gold/feature_v2/train/`
+* Output Path:
+  `abfss://lakehouse@noorawitha.dfs.core.windows.net/gold/features_v2/final_train`
+
+## Implemented Steps
+
+### 1. Text Cleaning & Normalization
+
+* Converted text to lowercase
+* Removed URLs, numbers, punctuation, and extra spaces
+* Filtered out reviews shorter than 10 characters
+* Generated:
+
+  * `clean_review`
+
+### 2. Basic Text Features
+
+Computed structural properties of each review:
+
+* `review_length_words` – total word count
+* `review_length_chars` – total character count
+
+### 3. TF-IDF Features
+
+* Applied Spark ML CountVectorizer + IDF
+* Generated:
+
+  * `tf_features`
+  * `tfidf_features`
+* Configuration:
+
+  * vocabSize = 5000
+  * minDF = 5
+
+### 4. Semantic Embeddings
+
+* Generated dense embeddings using SentenceTransformer
+* Each review transformed into a vector of floats
+* Stored as:
+
+  * `embedding`
+
+### 5. Additional Linguistic Features
+
+Enhanced the dataset with advanced text metrics:
+
+* Flesch Reading Ease Score
+
+  * Column: `readability_score`
+* TextBlob Subjectivity
+
+  * Column: `subjectivity`
+* Average Word Length
+
+  * Column: `avg_word_length`
+* Lexical Diversity
+
+  * Column: `lexical_diversity`
+
+### 6. Final Dataset Composition
+
+All features were consolidated into a unified Delta table containing:
+
+* Metadata:
+
+  * `review_id`, `book_id`, `rating`
+* Cleaned text:
+
+  * `clean_review`
+* Structural features:
+
+  * word & character length
+* Vector features:
+
+  * TF-IDF vectors
+  * BERT embeddings
+* Linguistic metrics:
+
+  * readability, subjectivity, lexical diversity
+
+The final dataset combines statistical, semantic, and emotional dimensions of the text, creating a robust foundation for model training and evaluation.
+
+
+## Technologies & Libraries
+
+* Azure Databricks
+* PySpark
+* Spark MLlib
+* TextBlob
+* textstat
+* sentence-transformers
+* scikit-learn
+
+
+## Git Workflow
+
+* Branch created: `text_feature_extraction`
+* Notebook:
+
+  * `goodreads_text_features.ipynb`
+
+All work has been committed under this branch as required.
+
+
+## Conclusion
+
+This lab demonstrates a complete text feature engineering pipeline, transitioning raw textual data into high-quality machine-learning-ready features. The resulting dataset is clean, structured, and optimized for modeling tasks in the subsequent lab.
+
+
+
+```
+
 Author
 Noora AlBordeni
 Student ID: 60314597
 University of Doha for Science and Technology
+
+
